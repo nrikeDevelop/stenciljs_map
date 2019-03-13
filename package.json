@@ -1,0 +1,26 @@
+{
+  "name": "mapstudy",
+  "private": true,
+  "version": "0.0.1",
+  "description": "mapstudy",
+  "license": "MIT",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "stencil build",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watch"
+  },
+  "dependencies": {
+    "@ionic/core": "4.0.0",
+    "leaflet": "^1.4.0",
+    "leaflet.locatecontrol": "^0.66.2",
+    "react-geolocated": "^2.4.1"
+  },
+  "devDependencies": {
+    "@stencil/core": "0.17.0",
+    "workbox-build": "3.4.1"
+  }
+}

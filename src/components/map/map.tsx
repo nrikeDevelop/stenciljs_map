@@ -48,7 +48,9 @@ export class Map {
   @State()lat="";
   @State()long="";
 
-  componentDidLoad(){
+  @State() mapa;
+
+  getQueryMap( newQuery, radius ){
 
     var myIcon = L.icon({
       iconUrl: 'https://img.icons8.com/nolan/64/000000/street-view.png',
@@ -75,10 +77,7 @@ export class Map {
 
       //nrikeDevelop
       //var id = "app_id=Kc3LpNWK9cN1PAVtnglo&app_code=loWnQ2KEvD-IeKXQNs9TWg";
-
-      var query="bares";
-      var radius="500";
-      
+      var query=newQuery;
       var getJson ="https://places.cit.api.here.com/places/v1/autosuggest?q="+query+"&in="+this.lat+"%2C"+this.long+"%3Br%3D"+radius+"&Accept-Language=en-US%2Cen%3Bq%3D0.9&"+id;
     
       //get json query data
@@ -139,15 +138,53 @@ export class Map {
 
       }, false);
     })
+
+    this.mapa = map;
+    
+  }
+
+  componentDidLoad(){
+    this.getQueryMap("bares",1);
+  }
+  
+  onChangeRange(){
+    alert("cambiado")
   }
 
     render(){
-        return (
+        return [
+          <ion-header>       
+            <ion-item>
+              <ion-range id="myRange" onTouchEnd={()=>{
+                  
+                  var element = event.currentTarget as HTMLInputElement;
+                  var value = element.value;
+                
+                  var radious = parseInt(value) * 1000/100;
+                  if ( radious < 100){
+                    radious = 100;
+                  }
+
+                  console.log(radious);
+
+                  this.mapa.off();
+                  this.mapa.remove();
+
+                  this.getQueryMap("coches",radious);
+                  
+              }} color="secondary">
+                <ion-label slot="start">100m</ion-label>
+                <ion-label slot="end">1km</ion-label>
+              </ion-range>
+            </ion-item>
+          </ion-header>,
+          <ion-content>
           <div style={{
               width:'100%',
               height:'100%'
-          }} id="map"></div>         
-        )
+          }} id="map"></div>  
+          </ion-content>       
+        ]
     }
 }
 

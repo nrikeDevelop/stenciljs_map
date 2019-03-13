@@ -170,7 +170,7 @@ export class Map {
                   this.mapa.off();
                   this.mapa.remove();
 
-                  this.getQueryMap("coches",radious);
+                  this.getQueryMap("bares",radious);
                   
               }} color="secondary">
                 <ion-label slot="start">100m</ion-label>

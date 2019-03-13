@@ -1,10 +1,10 @@
 {
-  "name": "mapstudy",
-  "short_name": "mapstudy",
+  "name": "findYourBeer",
+  "short_name": "findYourBeer",
   "start_url": "/",
   "display": "standalone",
   "icons": [{
-    "src": "assets/icon/icon.png",
+    "src": "assets/icon/beer.png",
     "sizes": "512x512",
     "type": "image/png"
   }],

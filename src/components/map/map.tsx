@@ -2,7 +2,7 @@ import { Component,State } from '@stencil/core';
 import L from 'leaflet';
 
 
-function markerInfo(name,ubication,phone,website){
+function markerInfo(name,ubication,phone,website,open,isOpen){
   var html = 
   `<div class="contentPopUp">
       <table>
@@ -27,6 +27,16 @@ function markerInfo(name,ubication,phone,website){
           <td><img class="iconBar" width="25px" height="25px;"src="https://img.icons8.com/nolan/64/000000/laptop.png"></td>
           <td><a href="${website}">Visit it!</a></td>
         </tr>`
+  }
+
+  if(open !== null){
+    if(isOpen){
+      html = html + "<tr><td><img class='iconBar' width='25px' height='25px' src='https://img.icons8.com/nolan/64/000000/overtime.png'></td><td><ion-label class='color_success'>"+open+"</ion-label></tr></td>";
+
+    }else{
+      html = html + "<tr><td><img class='iconBar' width='25px' height='25px' src='https://img.icons8.com/nolan/64/000000/overtime.png'></td><td><ion-label class='color_error'>"+open+"</ion-label></tr></td>";
+
+    }
   }
         
   html = html+
@@ -72,7 +82,7 @@ export class Map {
 
       var myIcon = L.icon({
         iconUrl: 'https://img.icons8.com/nolan/64/000000/street-view.png',
-        iconSize: [40, 45],
+        iconSize: [45, 50],
       });
 
       var barIcon = L.icon({
@@ -96,7 +106,7 @@ export class Map {
       //var id = "app_id=Kc3LpNWK9cN1PAVtnglo&app_code=loWnQ2KEvD-IeKXQNs9TWg";
       var query=newQuery;
       var getJson ="https://places.cit.api.here.com/places/v1/autosuggest?q="+query+"&in="+this.lat+"%2C"+this.long+"%3Br%3D"+radius+"&Accept-Language=en-US%2Cen%3Bq%3D0.9&"+id;
-    
+      // https://places.cit.api.here.com/places/v1/autosuggest?q=bares&in=39.4%2C-0.46%3Br%3D100&Accept-Language=en-US%2Cen%3Bq%3D0.9&app_id=Kc3LpNWK9cN1PAVtnglo&app_code=loWnQ2KEvD-IeKXQNs9TWg
       //get json query data
       fetch(getJson)
       .then(response => response.json())
@@ -115,9 +125,12 @@ export class Map {
             .then(info => {
               const location = info.location.address;
               const contact = info.contacts;
+              const hours = info.extended;
              
               var phone = null;
               var website = null;
+              var open = null;
+              var is_open = null;
             
               if (contact.phone !== undefined){
                 phone = contact.phone[0].value;
@@ -127,13 +140,19 @@ export class Map {
                 website = contact.website[0].value;
               }
 
+              if (hours !== undefined){
+                open = hours.openingHours.text;
+                is_open = hours.openingHours.isOpen;
+                console.log(is_open);
+              }
+
               elementPosition = L.marker([lat,long], {icon: barIcon}).addTo(this.map);
               
               var street =(location.street !== undefined ? location.street+",<br>" :"")+
               (location.house !== undefined ? location.house+"," :"")+
               (location.city !== undefined ? location.city :"");
 
-              elementPosition.bindPopup(markerInfo(info.name,street,phone,website));
+              elementPosition.bindPopup(markerInfo(info.name,street,phone,website,open,is_open));
             });       
           }
         });
@@ -173,11 +192,11 @@ export class Map {
     // }
 
     if (parseInt(value) <= 300){
-      this.map.setZoom(18)
-    }else if( parseInt(value) > 300 && parseInt(value) <= 700){
       this.map.setZoom(17)
-    }else if ( parseInt(value) > 700 ){
+    }else if( parseInt(value) > 300 && parseInt(value) <= 700){
       this.map.setZoom(16)
+    }else if ( parseInt(value) > 700 ){
+      this.map.setZoom(15)
     }
 
 

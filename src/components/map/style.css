@@ -675,3 +675,11 @@
 .grad:hover {
 	background-image: linear-gradient( rgb(0, 132, 255), rgb(102, 0, 105));
 }
+
+.color_success{
+	color :#62C27F;
+}
+
+.color_error{
+	color :#D36565;
+}
